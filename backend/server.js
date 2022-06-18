@@ -6,7 +6,7 @@ const fs = require('fs');
 const PORT = process.env.PORT || 5000
 var stopWords;
 try {
-  stopWords = fs.readFileSync(process.cwd()+'\\stopWords.txt');
+  stopWords = fs.readFileSync(process.cwd()+'/stopWords.txt');
   
 } catch (err) {
   console.error(err);
