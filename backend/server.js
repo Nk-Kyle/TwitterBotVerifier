@@ -1,16 +1,17 @@
-const e = require('express');
+const process = require('process');
 const express = require('express');
 const app = express();
 const fs = require('fs');
 
+const PORT = process.env.PORT || 5000
 var stopWords;
 try {
-  stopWords = fs.readFileSync('./stopWords.txt', 'utf8');
+  stopWords = fs.readFileSync(process.cwd()+'\\stopWords.txt');
   
 } catch (err) {
   console.error(err);
 }
-const stopWordsArr = stopWords.split('\r\n');
+const stopWordsArr = stopWords.toString().split('\r\n');
 
 
 require ('dotenv').config();
@@ -157,4 +158,4 @@ checkBot("@Jokowi").then(function(value){
     console.log(value)
 })
 
-app.listen(5000, () => {console.log("Server started on port 5000")})
+app.listen(PORT, () => {console.log("Server started on port 5000")})
