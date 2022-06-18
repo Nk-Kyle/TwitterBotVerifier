@@ -11,6 +11,7 @@ try {
   
 } catch (err) {
   console.error(err);
+  
 }
 const stopWordsArr = stopWords.toString().split('\r\n');
 
