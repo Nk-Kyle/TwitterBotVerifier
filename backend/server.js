@@ -24,7 +24,7 @@ var client = new Twitter({
   });
 
 var baseVector = [parseFloat(process.env.FOLLOWERS_PARAM),
-                parseFloat(process.env.DATE_CREATED_PARAM),
+                Date.parse(process.env.DATE_CREATED_PARAM)/(86400000*3600),
                 parseFloat(process.env.TIME_BETWEEN_PARAM),
                 parseFloat(process.env.MOST_FREQUENT_PARAM)];
 var regex = /[.,\s]/g;
@@ -73,8 +73,9 @@ function getUserDetails(name){
         client.get('users/show', {screen_name: name}, function(error, user, response) {
             if (!error) {
                 followers = user.followers_count
-                createDate = Date.parse(user.created_at)
-                resolve ({followers, createDate})
+                createDate = Date.parse(user.created_at)/(86400000 * 3600)
+                imageURL = user.profile_image_url.replace('_normal','')
+                resolve ({followers, createDate, imageURL})
             }
             else{
                 reject(error);
@@ -135,15 +136,24 @@ async function checkBot(name){
         mag2 += baseVector[i] * baseVector[i];
     }
     var cosine = dot / (Math.sqrt(mag1) * Math.sqrt(mag2));
-    return cosine;
+    console.log(retVal,cosine,baseVector);
+    return {"imageURL":details.imageURL,cosine:cosine,username:name};
     
 }
 
 app.get("/:id", (req,res) => {
-    res.json({"users": ["userOne", "userTwo", "userThree", req.params.id]});
+    checkBot(req.params.id).then(result => {
+        if (result == undefined){
+            res.status(404).send("User not found");
+        }
+        else{
+            res.json(result);
+        }
+    
+    })
 })
 
-checkBot("@SatriaMaul2022").then(function(value){
+checkBot("@Jokowi").then(function(value){
     console.log(value)
 })
 
