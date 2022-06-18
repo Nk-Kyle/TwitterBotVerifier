@@ -14,7 +14,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/'+account.current.value, {
+      const response = await fetch('https://twitter-bot-verifier-backend.vercel.app/'+account.current.value, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
